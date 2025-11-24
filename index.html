@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aventura en el Reino de JS</title>
+  <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+  <header>
+    <h1>Aventura en el Reino de JS</h1>
+  </header>
+
+  <main>
+    <!-- ESCENA 1: INICIO -->
+    <div id="scene-1" class="scene active">
+      <div class="player-info">
+        <img id="player-avatar" src="./img/avatar/Avatar.png" alt="Avatar del jugador">
+        <h2 id="player-name">Crypto</h2>
+      </div>
+      <div class="stats-container">
+        <div class="stat-box">
+          <p id="stat-attack">Ataque: 0</p>
+        </div>
+        <div class="stat-box">
+          <p id="stat-defense">Defensa: 0</p>
+        </div>
+        <div class="stat-box">
+          <p id="stat-life">Vida: 100</p>
+        </div>
+      </div>
+      <div class="button-container">
+        <button id="btn-scene-1" class="btn-primary">Ir al Mercado</button>
+      </div>
+    </div>
+
+    <!-- ESCENA 2: MERCADO -->
+    <div id="scene-2" class="scene">
+      <h2>Mercado</h2>
+      <p id="discount-message" class="discount-banner"></p>
+      
+      <div id="product-container" class="product-grid"></div>
+      
+      <h3>Cesta de compra:</h3>
+      <div id="cart-container" class="cart-grid"></div>
+      
+      <div class="button-container">
+        <button id="btn-scene-2" class="btn-primary">Continuar a la aventura</button>
+      </div>
+    </div>
+
+    <!-- ESCENA 3: ESTADO ACTUALIZADO -->
+    <div id="scene-3" class="scene">
+      <h2>Tu equipo actualizado</h2>
+      <div class="player-info">
+        <img id="player-avatar-3" src="./img/avatar/Avatar.png" alt="Avatar del jugador">
+        <h2 id="player-name-3">Paco</h2>
+      </div>
+      <div class="stats-container">
+        <div class="stat-box">
+          <p id="stat-attack-3">Ataque: 0</p>
+        </div>
+        <div class="stat-box">
+          <p id="stat-defense-3">Defensa: 0</p>
+        </div>
+        <div class="stat-box">
+          <p id="stat-life-3">Vida: 100</p>
+        </div>
+      </div>
+      
+      <h3>Inventario:</h3>
+      <div id="inventory-display" class="inventory-grid"></div>
+      
+      <div class="button-container">
+        <button id="btn-scene-3" class="btn-primary">Ver enemigos</button>
+      </div>
+    </div>
+
+    <!-- ESCENA 4: ENEMIGOS -->
+    <div id="scene-4" class="scene">
+      <h2>Enemigos a enfrentar</h2>
+      <div id="enemy-container" class="enemy-grid"></div>
+      <div class="button-container">
+        <button id="btn-scene-4" class="btn-primary">¡Iniciar batallas!</button>
+      </div>
+    </div>
+
+    <!-- ESCENA 5: BATALLA -->
+    <div id="scene-5" class="scene">
+      <h2>Batalla</h2>
+      <div class="battle-info">
+        <h3>Enfrentando a: <span id="battle-enemy-name"></span></h3>
+        <img id="battle-enemy-avatar" src="" alt="Enemigo" class="battle-enemy-img">
+      </div>
+      
+      <div id="battle-log" class="battle-log"></div>
+      
+      <div id="battle-result" class="battle-result"></div>
+      
+      <div class="button-container">
+        <button id="btn-scene-5" class="btn-primary">Continuar</button>
+      </div>
+    </div>
+
+    <!-- ESCENA 6: FINAL -->
+    <div id="scene-6" class="scene">
+      <h2>¡Aventura completada!</h2>
+      <div class="final-stats">
+        <h3>Puntuación final:</h3>
+        <p class="final-points"><span id="final-points">0</span> puntos</p>
+        <h3>Rango:</h3>
+        <p class="final-rank" id="final-rank">Novato</p>
+      </div>
+      <div class="button-container">
+        <button id="btn-restart" class="btn-primary">Jugar de nuevo</button>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div id="inventory-container" class="inventory-footer"></div>
+  </footer>
+
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>
