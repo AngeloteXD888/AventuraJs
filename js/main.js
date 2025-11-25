@@ -1,29 +1,15 @@
 import { Jugador } from './clases/Jugador.js';
 import { Enemigo } from './clases/Enemigo.js';
 import { Jefe } from './clases/Jefe.js';
-import { productos, aplicarDescuentoMasivo } from './modulos/Mercado.js';
 import { combate } from './modulos/Batalla.js';
 import { distinguirJugador } from './modulos/Ranking.js';
-import { showScene, randomElement } from './utils.js';
+import { showScene, randomElement, formatearPrecio } from './utils.js';
 import { RAREZA } from './constants.js';
-
-// Al inicio de main.js, después de los imports
-console.log("✅ Módulos cargados correctamente");
-console.log("Jugador:", typeof Jugador);
-console.log("Productos:", productos);
-console.log("Utils:", typeof showScene);
-
-// Verificar que el DOM está listo
-document.addEventListener('DOMContentLoaded', function() {
-  console.log("✅ DOM cargado");
-  inicializarJuego();
-});
 
 // Variables globales del juego
 let jugador;
-let enemigos;
+let enemigos = [];
 let enemigoActualIndex = 0;
-let productosActuales = [];
 let carritoCompra = [];
 
 /**
@@ -31,20 +17,38 @@ let carritoCompra = [];
  */
 function inicializarJuego() {
   // Crear jugador
-  jugador = new Jugador('Paco', './img/characters/13.png', 100);
+  jugador = new Jugador('Paco', './img/avatar/Avatar.png', 100);
   
-  // Crear enemigos
-  enemigos = [
-    new Enemigo('Pathfinder', './img/enemigos/Pathfinder.png', 10, 50),
-    new Enemigo('Octane', './img/enemigos/Octane.jpg', 15, 70),
-    new Enemigo('Caustic', './img/enemigos/Caustic.png', 20, 90),
-    new Jefe('Revenant', './img/enemigos/Revenant.png', 30, 120)
-  ];
+  // Cargar enemigos desde el HTML
+  cargarEnemigosDesdeHTML();
   
   enemigoActualIndex = 0;
   carritoCompra = [];
   
   mostrarEscena1();
+}
+
+/**
+ * Carga los enemigos desde los elementos HTML
+ */
+function cargarEnemigosDesdeHTML() {
+  enemigos = [];
+  const enemyCards = document.querySelectorAll('#enemy-container .enemy-card');
+  
+  enemyCards.forEach(card => {
+    const nombre = card.dataset.nombre;
+    const avatar = card.querySelector('img').src;
+    const ataque = parseInt(card.dataset.ataque);
+    const vida = parseInt(card.dataset.vida);
+    const esJefe = card.dataset.esJefe === 'true';
+    
+    if (esJefe) {
+      const multiplicador = parseFloat(card.dataset.multiplicador);
+      enemigos.push(new Jefe(nombre, avatar, ataque, vida, multiplicador));
+    } else {
+      enemigos.push(new Enemigo(nombre, avatar, ataque, vida));
+    }
+  });
 }
 
 /**
@@ -56,19 +60,26 @@ function mostrarEscena1() {
   // Mostrar info del jugador
   document.getElementById('player-name').textContent = jugador.nombre;
   document.getElementById('player-avatar').src = jugador.avatar;
-  document.getElementById('stat-attack').textContent = `Ataque: ${jugador.obtenerAtaqueTotal()}`;
-  document.getElementById('stat-defense').textContent = `Defensa: ${jugador.obtenerDefensaTotal()}`;
-  document.getElementById('stat-life').textContent = `Vida: ${jugador.obtenerVidaTotal()}`;
+  actualizarEstadisticas('');
   
   // Limpiar inventario visual
   document.getElementById('inventory-container').innerHTML = '';
   
-  // Botón continuar - CORREGIDO
-  const btnScene1 = document.getElementById('btn-scene-1');
-  btnScene1.onclick = mostrarEscena2;
-  
-  // También añadir event listener para mayor compatibilidad
-  btnScene1.addEventListener('click', mostrarEscena2);
+  // Botón continuar
+  document.getElementById('btn-scene-1').onclick = mostrarEscena2;
+}
+
+/**
+ * Actualiza las estadísticas del jugador en pantalla
+ * @param {string} sufijo - Sufijo del ID (vacío, '-3', etc)
+ */
+function actualizarEstadisticas(sufijo) {
+  document.getElementById(`stat-attack${sufijo}`).textContent = 
+    `Ataque: ${jugador.obtenerAtaqueTotal()}`;
+  document.getElementById(`stat-defense${sufijo}`).textContent = 
+    `Defensa: ${jugador.obtenerDefensaTotal()}`;
+  document.getElementById(`stat-life${sufijo}`).textContent = 
+    `Vida: ${jugador.obtenerVidaTotal()}`;
 }
 
 /**
@@ -76,51 +87,32 @@ function mostrarEscena1() {
  */
 function mostrarEscena2() {
   showScene('scene-2');
-
-  console.log("Productos disponibles:", productos); 
-  console.log("RAREZA:", RAREZA); 
+  
   // Aplicar descuento aleatorio a una rareza
   const rarezas = Object.values(RAREZA);
   const rarezaDescuento = randomElement(rarezas);
-  productosActuales = aplicarDescuentoMasivo('rareza', rarezaDescuento, 20);
-  console.log("Productos con descuento:", productosActuales);
+  
+  aplicarDescuentoHTML(rarezaDescuento, 20);
   
   // Mostrar mensaje de descuento
   document.getElementById('discount-message').textContent = 
     `¡20% de descuento en productos ${rarezaDescuento}!`;
   
-  // Renderizar productos
-  const productContainer = document.getElementById('product-container');
-  productContainer.innerHTML = '';
-  
-  productosActuales.forEach((producto, index) => {
-    const productCard = document.createElement('div');
-    productCard.className = 'product-card';
-    productCard.id = `product-${index}`;
-    
-    productCard.innerHTML = `
-      <img src="${producto.imagen}" alt="${producto.nombre}">
-      <h3>${producto.nombre}</h3>
-      <p>Tipo: ${producto.tipo}</p>
-      <p>Bonus: +${producto.bonus}</p>
-      <p>Rareza: ${producto.rareza}</p>
-      <p class="price">${producto.formatearPrecio()}</p>
-      <button class="btn-add" data-index="${index}">Añadir</button>
-    `;
-    
-    productContainer.appendChild(productCard);
-  });
-  
   // Event listeners para botones de añadir
-  document.querySelectorAll('.btn-add').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      const index = parseInt(e.target.dataset.index);
-      toggleProducto(index, e.target);
-    });
+  const productCards = document.querySelectorAll('.product-card');
+  productCards.forEach(card => {
+    const button = card.querySelector('.btn-add');
+    button.onclick = () => toggleProducto(card);
+    
+    // Resetear estado visual
+    card.classList.remove('selected');
+    button.textContent = 'Añadir';
+    button.classList.remove('btn-remove');
   });
   
   // Limpiar cesta visual
   document.getElementById('cart-container').innerHTML = '';
+  carritoCompra = [];
   
   // Botón continuar
   document.getElementById('btn-scene-2').onclick = () => {
@@ -131,36 +123,73 @@ function mostrarEscena2() {
 }
 
 /**
- * Añade o quita un producto del carrito
+ * Aplica descuento a productos de una rareza en el HTML
+ * @param {string} rareza - Rareza a descontar
+ * @param {number} descuento - Porcentaje de descuento
  */
-function toggleProducto(index, button) {
-  const producto = productosActuales[index];
-  const productCard = document.getElementById(`product-${index}`);
+function aplicarDescuentoHTML(rareza, descuento) {
+  const productCards = document.querySelectorAll('.product-card');
+  
+  productCards.forEach(card => {
+    const rarezaCard = card.dataset.rareza;
+    const precioOriginal = parseInt(card.dataset.precio);
+    
+    let precioFinal = precioOriginal;
+    if (rarezaCard === rareza) {
+      precioFinal = Math.round(precioOriginal * (1 - descuento / 100));
+    }
+    
+    // Actualizar precio en el HTML
+    card.querySelector('.precio-value').textContent = formatearPrecio(precioFinal);
+    
+    // Guardar precio aplicado en un data attribute
+    card.dataset.precioActual = precioFinal;
+  });
+}
+
+/**
+ * Añade o quita un producto del carrito
+ * @param {HTMLElement} card - Elemento HTML de la tarjeta de producto
+ */
+function toggleProducto(card) {
+  const button = card.querySelector('.btn-add');
+  const imgSrc = card.querySelector('img').src;
+  
+  // Crear objeto producto desde los datos del HTML
+  const producto = {
+    nombre: card.dataset.nombre,
+    imagen: imgSrc,
+    precio: parseInt(card.dataset.precioActual || card.dataset.precio),
+    rareza: card.dataset.rareza,
+    tipo: card.dataset.tipo,
+    bonus: parseInt(card.dataset.bonus)
+  };
   
   const indexEnCarrito = carritoCompra.findIndex(p => p.nombre === producto.nombre);
   
   if (indexEnCarrito === -1) {
     // Añadir al carrito
     carritoCompra.push(producto);
-    productCard.classList.add('selected');
+    card.classList.add('selected');
     button.textContent = 'Retirar';
     button.classList.add('btn-remove');
     
     // Añadir a la cesta visual
     const cartItem = document.createElement('div');
     cartItem.className = 'cart-item';
-    cartItem.id = `cart-${index}`;
+    cartItem.dataset.nombre = producto.nombre;
     cartItem.innerHTML = `<img src="${producto.imagen}" alt="${producto.nombre}">`;
     document.getElementById('cart-container').appendChild(cartItem);
   } else {
     // Quitar del carrito
     carritoCompra.splice(indexEnCarrito, 1);
-    productCard.classList.remove('selected');
+    card.classList.remove('selected');
     button.textContent = 'Añadir';
     button.classList.remove('btn-remove');
     
     // Quitar de la cesta visual
-    document.getElementById(`cart-${index}`).remove();
+    const cartItem = document.querySelector(`#cart-container .cart-item[data-nombre="${producto.nombre}"]`);
+    if (cartItem) cartItem.remove();
   }
 }
 
@@ -173,9 +202,7 @@ function mostrarEscena3() {
   // Mostrar estadísticas actualizadas
   document.getElementById('player-name-3').textContent = jugador.nombre;
   document.getElementById('player-avatar-3').src = jugador.avatar;
-  document.getElementById('stat-attack-3').textContent = `Ataque: ${jugador.obtenerAtaqueTotal()}`;
-  document.getElementById('stat-defense-3').textContent = `Defensa: ${jugador.obtenerDefensaTotal()}`;
-  document.getElementById('stat-life-3').textContent = `Vida: ${jugador.obtenerVidaTotal()}`;
+  actualizarEstadisticas('-3');
   
   // Mostrar inventario
   const inventoryDisplay = document.getElementById('inventory-display');
@@ -193,33 +220,13 @@ function mostrarEscena3() {
 }
 
 /**
- * Muestra la escena 4 (enemigos)
+ * Muestra la escena 4 (enemigos) - ya están en el HTML
  */
 function mostrarEscena4() {
   showScene('scene-4');
   
-  // Mostrar todos los enemigos
-  const enemyContainer = document.getElementById('enemy-container');
-  enemyContainer.innerHTML = '';
-  
-  enemigos.forEach((enemigo, index) => {
-    const enemyCard = document.createElement('div');
-    enemyCard.className = 'enemy-card';
-    
-    const esJefe = enemigo instanceof Jefe;
-    
-    enemyCard.innerHTML = `
-      <img src="${enemigo.avatar}" alt="${enemigo.nombre}">
-      <h3>${enemigo.nombre} ${esJefe ? '(JEFE)' : ''}</h3>
-      <p>Ataque: ${enemigo.ataque}</p>
-      <p>Vida: ${enemigo.vidaMaxima}</p>
-      ${esJefe ? `<p>Multiplicador: x${enemigo.multiplicadorDano}</p>` : ''}
-    `;
-    
-    enemyContainer.appendChild(enemyCard);
-  });
-  
-  // Botón iniciar batallas
+  // Los enemigos ya están renderizados en el HTML
+  // Solo configuramos el botón
   document.getElementById('btn-scene-4').onclick = iniciarBatalla;
 }
 
@@ -266,7 +273,7 @@ function mostrarEscena5(enemigo, resultado) {
       <p>Has ganado ${resultado.puntosObtenidos} puntos</p>
       <p>Puntos totales: ${jugador.puntos}</p>
     `;
-    resultDiv.className = 'victory';
+    resultDiv.className = 'battle-result victory';
     
     // Botón continuar a siguiente batalla
     const btnContinue = document.getElementById('btn-scene-5');
@@ -281,7 +288,7 @@ function mostrarEscena5(enemigo, resultado) {
       <p>Has sido derrotado...</p>
       <p>Puntos totales: ${jugador.puntos}</p>
     `;
-    resultDiv.className = 'defeat';
+    resultDiv.className = 'battle-result defeat';
     
     // Botón ir al final
     const btnContinue = document.getElementById('btn-scene-5');
@@ -304,9 +311,9 @@ function mostrarEscenaFinal() {
   // Estilo según rango
   const rankDisplay = document.getElementById('final-rank');
   if (rango === 'Veterano') {
-    rankDisplay.className = 'rank-veteran';
+    rankDisplay.className = 'final-rank rank-veteran';
   } else {
-    rankDisplay.className = 'rank-novice';
+    rankDisplay.className = 'final-rank rank-novice';
   }
   
   // Botón reiniciar
@@ -317,4 +324,3 @@ function mostrarEscenaFinal() {
 
 // Iniciar el juego cuando cargue la página
 window.addEventListener('DOMContentLoaded', inicializarJuego);
-
