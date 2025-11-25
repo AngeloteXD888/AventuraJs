@@ -8,7 +8,7 @@ import { Jefe } from '../clases/Jefe.js';
  * @returns {Object} Resultado del combate {ganador, puntosObtenidos, log}
  */
 export function combate(enemigo, jugador) {
-  // Reiniciar vida del jugador antes del combate
+  // Reiniciar vida antes del combate
   jugador.vida = jugador.obtenerVidaTotal();
   enemigo.vida = enemigo.vidaMaxima;
   
@@ -34,7 +34,7 @@ export function combate(enemigo, jugador) {
       break;
     }
     
-    // Ataque del enemigo
+    // Ataque del enemigo - CORREGIDO: defensa reduce el daño
     const danoAlJugador = Math.max(0, ataqueEnemigo - defensaJugador);
     jugador.vida -= danoAlJugador;
     log.push(`${enemigo.nombre} ataca a ${jugador.nombre} y causa ${danoAlJugador} de daño.`);
