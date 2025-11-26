@@ -1,0 +1,39 @@
+/* ---------------------------- ESCENA 4: ENEMIGOS ---------------------------- */
+
+.enemy-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.enemy-card {
+  background: var(--primary-color);
+  border: 3px solid var(--danger-color);
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  transition: box-shadow 0.3s ease;
+}
+
+.enemy-card:hover {
+  box-shadow: 0 8px 16px rgba(255, 55, 95, 0.3);
+}
+
+.enemy-card img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  margin-bottom: 12px;
+}
+
+.enemy-card h3 {
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+}
+
+.enemy-card p {
+  color: var(--text-secondary);
+  margin: 6px 0;
+}

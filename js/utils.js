@@ -6,11 +6,32 @@
  * Muestra u oculta un elemento (escena) de la pantalla
  * @param {number} id - identificador del elemento
  */
+/**
+ * Muestra u oculta un elemento (escena) de la pantalla con transición
+ * @param {string} id - identificador del elemento
+ */
 export function showScene(id) {
-  document.querySelectorAll('.scene').forEach(
-    element => element.classList.remove('active')
-  );
-  document.getElementById(id).classList.add('active');
+  const currentScene = document.querySelector('.scene.active');
+  const nextScene = document.getElementById(id);
+  
+  if (currentScene) {
+    // Añadir clase de salida a la escena actual
+    currentScene.classList.add('exiting');
+    
+    // Esperar a que termine la animación de salida
+    setTimeout(() => {
+      currentScene.classList.remove('active', 'exiting');
+      
+      // Mostrar la nueva escena
+      nextScene.classList.add('active');
+      
+      // Hacer scroll hacia arriba suavemente
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 300); // Duración de la animación de salida
+  } else {
+    // Si no hay escena activa, mostrar directamente
+    nextScene.classList.add('active');
+  }
 }
 
 /**

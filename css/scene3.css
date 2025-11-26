@@ -1,0 +1,31 @@
+/* ---------------------------- ESCENA 3: INVENTARIO ---------------------------- */
+
+.inventory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 16px;
+  background: var(--primary-color);
+  border-radius: 8px;
+  border: 2px solid var(--accent-color);
+  min-height: 120px;
+}
+
+.inventory-item {
+  background: var(--secondary-color);
+  padding: 10px;
+  border-radius: 6px;
+  border: 2px solid var(--accent-secondary);
+  transition: transform 0.3s ease;
+}
+
+.inventory-item:hover {
+  transform: scale(1.1);
+}
+
+.inventory-item img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}

@@ -1,0 +1,180 @@
+/* ---------------------------- ESCENA 5: BATALLA ---------------------------- */
+
+.battle-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.battle-header h3 {
+  color: var(--danger-color);
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+/* Contenedor de combatientes */
+.battle-fighters {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  gap: 20px;
+}
+
+.fighter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  max-width: 200px;
+}
+
+/* Animaciones de entrada */
+.fighter-player {
+  animation: slideInLeft 0.8s ease-out;
+}
+
+.fighter-enemy {
+  animation: slideInRight 0.8s ease-out;
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-150%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(150%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.fighter img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  border: 3px solid;
+  border-radius: 50%;
+  background: var(--primary-color);
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.fighter-player img {
+  border-color: var(--accent-secondary);
+}
+
+.fighter-enemy img {
+  border-color: var(--danger-color);
+}
+
+.fighter h4 {
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+}
+
+.fighter-stats {
+  text-align: center;
+}
+
+.fighter-stats p {
+  color: var(--text-secondary);
+  margin: 4px 0;
+  font-size: 0.9rem;
+}
+
+/* VS en el centro */
+.battle-vs {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--accent-color);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Log de batalla */
+.battle-log {
+  background: var(--primary-color);
+  border: 2px solid var(--accent-secondary);
+  border-radius: 8px;
+  padding: 20px;
+  max-height: 300px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+  font-family: 'Courier New', monospace;
+}
+
+.battle-log p {
+  color: var(--text-primary);
+  margin: 8px 0;
+  line-height: 1.4;
+}
+
+/* Resultado de batalla */
+.battle-result {
+  background: var(--primary-color);
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 20px;
+  border: 3px solid;
+}
+
+.battle-result.victory {
+  border-color: var(--success-color);
+}
+
+.battle-result.defeat {
+  border-color: var(--danger-color);
+}
+
+.battle-result h2 {
+  font-size: 1.8rem;
+  margin-bottom: 12px;
+}
+
+.battle-result.victory h2 {
+  color: var(--success-color);
+}
+
+.battle-result.defeat h2 {
+  color: var(--danger-color);
+}
+
+.battle-result p {
+  font-size: 1.2rem;
+  margin: 8px 0;
+  color: var(--text-primary);
+}
+
+/* Responsive para batalla */
+@media (max-width: 768px) {
+  .battle-fighters {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .battle-vs {
+    font-size: 1.5rem;
+    margin: 10px 0;
+  }
+
+  .fighter {
+    max-width: 150px;
+  }
+
+  .fighter img {
+    width: 100px;
+    height: 100px;
+  }
+}
