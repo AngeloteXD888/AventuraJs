@@ -231,14 +231,53 @@ function iniciarBatalla() {
 }
 
 /**
- * Muestra la escena 5 (batalla)
+ * Muestra la escena 5 (batalla) con animaciones
+ * @param {Enemigo} enemigo - Enemigo actual
+ * @param {Object} resultado - Resultado del combate
  */
 function mostrarEscena5(enemigo, resultado) {
   showScene('scene-5');
   
+  // Hacer scroll hacia arriba para ver la animación
+  const scene5 = document.getElementById('scene-5');
+  scene5.scrollTop = 0;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  
+  // REINICIAR ANIMACIONES: Remover y volver a añadir las clases
+  const fighterPlayer = document.querySelector('.fighter-player');
+  const fighterEnemy = document.querySelector('.fighter-enemy');
+  
+  // Remover las clases de animación
+  fighterPlayer.classList.remove('fighter-player');
+  fighterEnemy.classList.remove('fighter-enemy');
+  
+  // Forzar reflujo del DOM para reiniciar la animación
+  void fighterPlayer.offsetWidth;
+  void fighterEnemy.offsetWidth;
+  
+  // Volver a añadir las clases de animación
+  fighterPlayer.classList.add('fighter-player');
+  fighterEnemy.classList.add('fighter-enemy');
+  
+  // Mostrar nombre del enemigo
   document.getElementById('battle-enemy-name').textContent = enemigo.nombre;
+  document.getElementById('battle-enemy-name-display').textContent = enemigo.nombre;
+  
+  // Mostrar avatar del enemigo
   document.getElementById('battle-enemy-avatar').src = enemigo.avatar;
   
+  // Mostrar estadísticas del enemigo
+  document.getElementById('battle-enemy-attack').textContent = enemigo.ataque;
+  document.getElementById('battle-enemy-life').textContent = enemigo.vidaMaxima;
+  
+  // Mostrar información del jugador
+  document.getElementById('battle-player-avatar').src = jugador.avatar;
+  document.getElementById('battle-player-name').textContent = jugador.nombre;
+  document.getElementById('battle-player-attack').textContent = jugador.obtenerAtaqueTotal();
+  document.getElementById('battle-player-defense').textContent = jugador.obtenerDefensaTotal();
+  document.getElementById('battle-player-life').textContent = jugador.obtenerVidaTotal();
+  
+  // Mostrar log de batalla
   const battleLog = document.getElementById('battle-log');
   battleLog.innerHTML = '';
   
@@ -248,6 +287,7 @@ function mostrarEscena5(enemigo, resultado) {
     battleLog.appendChild(p);
   });
   
+  // Mostrar resultado
   const resultDiv = document.getElementById('battle-result');
   if (resultado.ganador === 'jugador') {
     resultDiv.innerHTML = `
