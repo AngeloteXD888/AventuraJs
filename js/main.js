@@ -34,14 +34,15 @@ function cargarEnemigosDesdeHTML() {
     const nombre = card.dataset.nombre;
     const avatar = card.querySelector('img').src;
     const ataque = parseInt(card.dataset.ataque);
+    const defensa = parseInt(card.dataset.defensa);
     const vida = parseInt(card.dataset.vida);
     const esJefe = card.dataset.esJefe === 'true';
     
     if (esJefe) {
       const multiplicador = parseFloat(card.dataset.multiplicador);
-      enemigos.push(new Jefe(nombre, avatar, ataque, vida, multiplicador));
+      enemigos.push(new Jefe(nombre, avatar, ataque, defensa, vida, multiplicador));
     } else {
-      enemigos.push(new Enemigo(nombre, avatar, ataque, vida));
+      enemigos.push(new Enemigo(nombre, avatar, ataque, defensa, vida));
     }
   });
 }
@@ -268,6 +269,7 @@ function mostrarEscena5(enemigo, resultado) {
   
   // Mostrar estadísticas del enemigo
   document.getElementById('battle-enemy-attack').textContent = enemigo.ataque;
+  document.getElementById('battle-enemy-defense').textContent = enemigo.defensa;
   document.getElementById('battle-enemy-life').textContent = enemigo.vidaMaxima;
   
   // Mostrar información del jugador

@@ -11,13 +11,11 @@
   <link rel="stylesheet" href="./css/scene4.css">
   <link rel="stylesheet" href="./css/scene5.css">
   <link rel="stylesheet" href="./css/scene6.css">
-  
 </head>
 <body>
   <header>
     <h1>Aventura en el Reino de JS</h1>
   </header>
-
   <main>
     <!-- ESCENA 1: INICIO -->
     <div id="scene-1" class="scene active">
@@ -201,31 +199,35 @@
       <h2>Enemigos a enfrentar</h2>
       <div id="enemy-container" class="enemy-grid">
         
-        <div class="enemy-card" data-nombre="Pathfinder" data-ataque="10" data-vida="50" data-es-jefe="false">
+        <div class="enemy-card" data-nombre="Pathfinder" data-ataque="10" data-defensa="3" data-vida="50" data-es-jefe="false">
           <img src="./img/enemigos/Pathfinder.png" alt="Pathfinder">
           <h3>Pathfinder</h3>
-          <p>Ataque: <span class="enemy-attack">10</span></p>
+          <p>Ataque: <span class="enemy-attack">7</span></p>
+          <p>Defensa: <span class="enemy-defense">2</span></p>
           <p>Vida: <span class="enemy-life">50</span></p>
         </div>
 
-        <div class="enemy-card" data-nombre="Octane" data-ataque="15" data-vida="70" data-es-jefe="false">
+        <div class="enemy-card" data-nombre="Octane" data-ataque="15" data-defensa="5" data-vida="70" data-es-jefe="false">
           <img src="./img/enemigos/Octane.png" alt="Octane">
           <h3>Octane</h3>
-          <p>Ataque: <span class="enemy-attack">15</span></p>
+          <p>Ataque: <span class="enemy-attack">12</span></p>
+          <p>Defensa: <span class="enemy-defense">4</span></p>
           <p>Vida: <span class="enemy-life">70</span></p>
         </div>
 
-        <div class="enemy-card" data-nombre="Caustic" data-ataque="20" data-vida="90" data-es-jefe="false">
+        <div class="enemy-card" data-nombre="Caustic" data-ataque="20" data-defensa="8" data-vida="90" data-es-jefe="false">
           <img src="./img/enemigos/Caustic.png" alt="Caustic">
           <h3>Caustic</h3>
-          <p>Ataque: <span class="enemy-attack">20</span></p>
+          <p>Ataque: <span class="enemy-attack">15</span></p>
+          <p>Defensa: <span class="enemy-defense">6</span></p>
           <p>Vida: <span class="enemy-life">90</span></p>
         </div>
 
-        <div class="enemy-card" data-nombre="Revenant" data-ataque="30" data-vida="120" data-es-jefe="true" data-multiplicador="1.5">
+        <div class="enemy-card" data-nombre="Revenant" data-ataque="30" data-defensa="12" data-vida="120" data-es-jefe="true" data-multiplicador="1.5">
           <img src="./img/enemigos/Revenant.png" alt="Revenant">
           <h3>Revenant <span style="color: var(--danger-color); font-weight: bold;">(JEFE)</span></h3>
-          <p>Ataque: <span class="enemy-attack">30</span></p>
+          <p>Ataque: <span class="enemy-attack">25</span></p>
+          <p>Defensa: <span class="enemy-defense">10</span></p>
           <p>Vida: <span class="enemy-life">120</span></p>
           <p>Multiplicador: x<span class="enemy-multiplier">1.5</span></p>
         </div>
@@ -267,6 +269,7 @@
       <h4 id="battle-enemy-name-display"></h4>
       <div class="fighter-stats">
         <p>Ataque: <span id="battle-enemy-attack">0</span></p>
+        <p>Defensa: <span id="battle-enemy-defense">0</span></p>
         <p>Vida: <span id="battle-enemy-life">0</span></p>
       </div>
     </div>

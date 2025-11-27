@@ -15,6 +15,7 @@ export function combate(enemigo, jugador) {
   const ataqueJugador = jugador.obtenerAtaqueTotal();
   const defensaJugador = jugador.obtenerDefensaTotal();
   const ataqueEnemigo = enemigo.ataque;
+  const defensaEnemigo = enemigo.defensa;
   
   const log = [];
   let turno = 1;
@@ -23,8 +24,8 @@ export function combate(enemigo, jugador) {
   while (jugador.vida > 0 && enemigo.vida > 0) {
     log.push(`--- Turno ${turno} ---`);
     
-    // Ataque del jugador
-    const danoAlEnemigo = ataqueJugador;
+    // Ataque del jugador - la defensa del enemigo reduce el daño
+    const danoAlEnemigo = Math.max(0, ataqueJugador - defensaEnemigo);
     enemigo.vida -= danoAlEnemigo;
     log.push(`${jugador.nombre} ataca a ${enemigo.nombre} y causa ${danoAlEnemigo} de daño.`);
     log.push(`Vida de ${enemigo.nombre}: ${Math.max(0, enemigo.vida)} / ${enemigo.vidaMaxima}`);
@@ -34,7 +35,7 @@ export function combate(enemigo, jugador) {
       break;
     }
     
-    // Ataque del enemigo - CORREGIDO: defensa reduce el daño
+    // Ataque del enemigo - la defensa del jugador reduce el daño
     const danoAlJugador = Math.max(0, ataqueEnemigo - defensaJugador);
     jugador.vida -= danoAlJugador;
     log.push(`${enemigo.nombre} ataca a ${jugador.nombre} y causa ${danoAlJugador} de daño.`);
