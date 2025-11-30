@@ -107,8 +107,12 @@ function mostrarEscena2() {
   document.getElementById('cart-container').innerHTML = '';
   carritoCompra = [];
   
-  const btn2 = document.getElementById('btn-scene-2');
+    const btn2 = document.getElementById('btn-scene-2');
   btn2.onclick = function() {
+    if (carritoCompra.length === 0) {
+      alert('¡Debes comprar al menos un artículo antes de continuar!');
+      return;
+    }
     carritoCompra.forEach(producto => jugador.añadirObjeto(producto));
     mostrarEscena3();
   };
