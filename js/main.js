@@ -343,7 +343,17 @@ function mostrarEscenaFinal() {
   btnRestart.onclick = function() {
     inicializarJuego();
   };
+
+if (rango === 'Veterano') {
+  confetti({
+    particleCount: 100,
+    spread: 70,
+    origin: { y: 0.6 }
+  });
 }
+}
+
+
 
 // Iniciar el juego cuando cargue la página
 window.addEventListener('DOMContentLoaded', inicializarJuego);

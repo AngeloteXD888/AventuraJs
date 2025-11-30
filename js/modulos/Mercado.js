@@ -1,5 +1,3 @@
-import { RAREZA, TIPO_PRODUCTO } from '../constants.js';
-
 /**
  * Obtiene todos los productos desde el HTML
  * @returns {Array<Object>} Array de productos
