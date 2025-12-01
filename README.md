@@ -2,7 +2,8 @@
 
 ## Descripción
 
-**Aventura en el Reino de JS** es un videojuego RPG basado en navegador donde el jugador lucha contra oleadas de enemigos en una arena mística para alcanzar la máxima puntuación. La clave del éxito radica en la selección estratégica de objetos en el mercado al inicio de cada aventura.
+**Aventura en el Reino de JS** es un videojuego RPG basado en navegador donde el jugador lucha contra oleadas de enemigos en una arena mística para alcanzar la máxima puntuación. La clave del éxito radica en la selección estratégica de objetos en el mercado al inicio de cada aventura. 
+En esta aventura he querido inspirarme en el videojuego Apex Legends usando a uno de sus personajes jugables como en este caso he querido escoger a Crypto, en el mercado usando las armas, escudos/armaduras, y algunos de sus consumibles, y en la parte de enemigos y jefes usando otros personajes jugables del videojuego en el que me he inspirado pero siguiendo el guión de lo que se pedia en los pdfs de cliente y diseño.
 
 ## Características Principales
 
@@ -64,11 +65,9 @@ aventura-reino-js/
 ## Instalación y Uso
 
 1. Clona el repositorio
-2. Abre `index.html` en tu navegador
+2. Abre `index.html` en tu navegador con Live Server
 3. ¡Comienza tu aventura!
 
 ## Documentación
 
 La documentación completa del código está disponible en la carpeta `docs/` generada con JSDoc.
-
-
