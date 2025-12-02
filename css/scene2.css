@@ -89,3 +89,32 @@
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   }
 }
+
+/* Animación cuando se añade al carrito */
+@keyframes cartNotification {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) translateY(20px);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8) translateY(-20px);
+  }
+}
+
+.cart-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: var(--success-color);
+  color: var(--primary-color);
+  padding: 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  animation: cartNotification 2s ease forwards;
+  z-index: 1000;
+}
