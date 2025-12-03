@@ -350,8 +350,8 @@ function mostrarEscenaFinal() {
 
 if (rango === 'Veterano') {
   confetti({
-    particleCount: 100,
-    spread: 70,
+    particleCount: 600,
+    spread: 150,
     origin: { y: 0.6 }
   });
 }
