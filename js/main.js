@@ -1,4 +1,5 @@
 import { Jugador } from './clases/Jugador.js';
+import { Producto } from './clases/Producto.js';
 import { Enemigo } from './clases/Enemigo.js';
 import { Jefe } from './clases/Jefe.js';
 import { combate } from './modulos/Batalla.js';
@@ -148,14 +149,14 @@ function toggleProducto(card) {
   const button = card.querySelector('.btn-add');
   const imgSrc = card.querySelector('img').src;
   
-  const producto = {
-    nombre: card.dataset.nombre,
-    imagen: imgSrc,
-    precio: parseInt(card.dataset.precioActual || card.dataset.precio),
-    rareza: card.dataset.rareza,
-    tipo: card.dataset.tipo,
-    bonus: parseInt(card.dataset.bonus)
-  };
+  const producto = new Producto(
+  card.dataset.nombre,
+  imgSrc,
+  parseInt(card.dataset.precio),
+  card.dataset.rareza,
+  card.dataset.tipo,
+  parseInt(card.dataset.bonus)
+);
   
   const indexEnCarrito = carritoCompra.findIndex(p => p.nombre === producto.nombre);
   
