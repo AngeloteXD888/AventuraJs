@@ -244,11 +244,6 @@ function iniciarBatalla() {
 function mostrarEscena5(enemigo, resultado) {
   showScene('scene-5');
   
-  // Hacer scroll hacia arriba para ver la animación
-  const scene5 = document.getElementById('scene-5');
-  scene5.scrollTop = 0;
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  
   // REINICIAR ANIMACIONES: Remover y volver a añadir las clases
   const fighterPlayer = document.querySelector('.fighter-player');
   const fighterEnemy = document.querySelector('.fighter-enemy');
@@ -287,12 +282,17 @@ function mostrarEscena5(enemigo, resultado) {
   // Mostrar log de batalla
   const battleLog = document.getElementById('battle-log');
   battleLog.innerHTML = '';
+  battleLog.scrollTop = 0; // Resetear scroll del log
   
   resultado.log.forEach(linea => {
     const p = document.createElement('p');
     p.textContent = linea;
     battleLog.appendChild(p);
   });
+  
+  // Resetear scroll de la escena también
+  const scene5 = document.getElementById('scene-5');
+  scene5.scrollTop = 0;
   
   // Mostrar resultado
   const resultDiv = document.getElementById('battle-result');
