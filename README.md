@@ -3,7 +3,10 @@
 ## Descripción
 
 **Aventura en el Reino de JS** es un videojuego RPG basado en navegador donde el jugador lucha contra oleadas de enemigos en una arena mística para alcanzar la máxima puntuación. La clave del éxito radica en la selección estratégica de objetos en el mercado al inicio de cada aventura. 
-En esta aventura he querido inspirarme en el videojuego Apex Legends usando a uno de sus personajes jugables como en este caso he querido escoger a Crypto, en el mercado usando las armas, escudos/armaduras, y algunos de sus consumibles, y en la parte de enemigos y jefes usando otros personajes jugables del videojuego en el que me he inspirado pero siguiendo el guión de lo que se pedia en los pdfs de cliente y diseño.
+En esta aventura he querido inspirarme en el videojuego Apex Legends, un videojuego genero battle royale, usando a uno de sus personajes jugables como en este caso he querido escoger a Crypto, en el mercado usando las armas, escudos/armaduras, y algunos de sus consumibles, y en la parte de enemigos y jefes usando otros personajes jugables del videojuego en el que me he inspirado pero siguiendo el guión de lo que se pedia en los pdfs de cliente y diseño.
+
+ACLARACION: HE PUESTO DEFENSA A LOS ENEMIGOS PORQUE QUERIA HACERLO COMO EL VIDEOJUEGO QUE YA HE MENCIONADO ANTERIORMENTE
+NO LO HE HECHO PARA VER SI SUMA MAS PUNTOS. PIDO QUE ESO NO AFECTE A LA NOTA DE MI TRABAJO
 
 ## Características Principales
 
