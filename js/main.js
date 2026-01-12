@@ -466,21 +466,19 @@ function iniciarBatalla() {
 }
 
 /**
- * Muestra animación de monedas tras victoria
+ * Muestra animación de 3 monedas cayendo tras victoria
+ * REEMPLAZA la función mostrarAnimacionMonedas() en main.js
  */
 function mostrarAnimacionMonedas() {
-  const monedas = `
-    <img src="./img/moneda.png" alt="moneda" class="moneda">
-    <img src="./img/moneda.png" alt="moneda" class="moneda">
-    <img src="./img/moneda.png" alt="moneda" class="moneda">
-  `;
-  document.body.insertAdjacentHTML('beforeend', monedas);
+  const monedasContainer = document.getElementById('monedas-container');
   
-  // Eliminar las monedas después de la animación
+  // Activar la animación
+  monedasContainer.classList.add('active');
+  
+  // Eliminar la clase después de la animación para poder reutilizarla
   setTimeout(() => {
-    const monedasElements = document.querySelectorAll('.moneda');
-    monedasElements.forEach(m => m.remove());
-  }, 3000);
+    monedasContainer.classList.remove('active');
+  }, 3500);
 }
 
 /**
@@ -577,9 +575,8 @@ function mostrarEscena5(enemigo, resultado) {
 function mostrarEscenaFinal() {
   showScene('scene-6');
   
-  // Calcular puntuación total (puntos + dinero en euros)
-  const dineroEnEuros = Math.floor(jugador.dinero / 100);
-  const puntuacionTotal = jugador.puntos + dineroEnEuros;
+  // Calcular puntuación total (puntos + dinero restante en céntimos)
+  const puntuacionTotal = jugador.puntos + jugador.dinero;
   const rango = distinguirJugador(puntuacionTotal);
   
   // Guardar en ranking
@@ -613,6 +610,7 @@ function mostrarEscenaFinal() {
     inicializarJuego();
   };
 
+  // Confetti solo si es veterano
   if (rango === 'Veterano') {
     confetti({
       particleCount: 600,

@@ -5,7 +5,7 @@ import { Jefe } from '../clases/Jefe.js';
  * Simula un combate por turnos entre jugador y enemigo
  * @param {Enemigo} enemigo - Enemigo a combatir
  * @param {Jugador} jugador - Jugador que combate
- * @returns {Object} Resultado del combate {ganador, puntosObtenidos, log}
+ * @returns {Object} Resultado del combate {ganador, puntosObtenidos, monedasObtenidas, log}
  */
 export function combate(enemigo, jugador) {
   // Reiniciar vida antes del combate
@@ -50,36 +50,39 @@ export function combate(enemigo, jugador) {
   }
   
   // Determinar ganador y calcular puntos
-  let ganador, puntosObtenidos, dineroObtenido;
+  let ganador, puntosObtenidos, monedasObtenidas;
   
   if (jugador.vida > 0) {
     ganador = 'jugador';
     puntosObtenidos = PUNTUACION_BASE + ataqueEnemigo;
-    dineroObtenido = 50;
     
-    // Si es un jefe, multiplicar los puntos
+    // CORRECCIÓN: Dinero en céntimos
+    // Si es enemigo normal: 5 monedas (500 céntimos)
+    // Si es jefe: 10 monedas (1000 céntimos)
     if (enemigo instanceof Jefe) {
+      monedasObtenidas = 1000; // 10 monedas = 10,00€
       puntosObtenidos = Math.round(puntosObtenidos * enemigo.multiplicadorDano);
-      dineroObtenido = 5;
       log.push(`¡Has derrotado a un JEFE! Puntos x${enemigo.multiplicadorDano}`);
-      log.push(`Dinero obtenido x${enemigo.multiplicadorDano} €`)
+      log.push(`Has ganado 10,00€`);
+    } else {
+      monedasObtenidas = 500; // 5 monedas = 5,00€
+      log.push(`Has ganado 5,00€`);
     }
     
     jugador.sumarPuntos(puntosObtenidos);
-    jugador.sumarPuntos(dineroObtenido);
+    jugador.añadirDinero(monedasObtenidas);
     log.push(`Has ganado ${puntosObtenidos} puntos.`);
-    log.push(`Dinero obtenido ${dineroObtenido} €`)
 
   } else {
     ganador = 'enemigo';
     puntosObtenidos = 0;
-    dineroObtenido = 0;
+    monedasObtenidas = 0;
   }
   
   return {
     ganador,
     puntosObtenidos,
-    dineroObtenido,
+    monedasObtenidas,
     log
   };
 }

@@ -1,0 +1,116 @@
+/* DEFENSA DISEÑO */
+/* Le he hecho un nuevo archivo css el cual se llama defensa.css*/
+
+/* ===== DEFENSA: MONEDERO ===== */
+
+.defensa-monedero {
+  position: fixed;
+  bottom: 1%;
+  left: 2%;
+  width: 80px;
+  height: 80px;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  animation: slideInFromLeft 1s ease forwards;
+  background-image: url(monedero.png);
+}
+
+.defensa-monedero p {
+  color: black;
+}
+
+@keyframes slideInFromLeft {
+  from {
+    transform: translateX(-150%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.defensa-monedero img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.defensa-monedero .dinero-amount {
+  position: absolute;
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  font-weight: bold;
+  pointer-events: none;
+}
+
+/* ===== DEFENSA: TABLA RANKING ===== */
+
+.ranking-table{ 
+  width: 80%;
+  margin: 0 auto;
+  align-items: center;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.ranking-table th {
+  background-color: var(--accent-color);
+  color: rgb(16, 16, 16);
+  padding: 10px;
+  border: 1px solid #cbcbcb;
+}
+
+.ranking-table td {
+  background-color: var(--primary-color);
+  color: var(--text-primary);
+  padding: 10px;
+  border: 1px solid #cbcbcb;
+  text-align: center;
+}
+
+.ranking-table body {
+  text-align: center;
+}
+
+.ranking-table tr:nth-child(even) {
+  background-color: var(--secondary-color);
+}
+
+.ranking-table tr:hover {
+  background-color: var(--accent-secondary);
+}
+
+/* ===== DEFENSA: ANIMACION MONEDAS ===== */
+/* No he conseguido que roten como el video, lo he intentado pero no he sido capaz */
+
+.defensa-moneda {
+  display: flex;
+  position: fixed;
+  top: -100px;
+  width: 100px;
+  height: 100px;
+  animation: dropandRotate 3s ease forwards;
+}
+
+@keyframes dropandRotate {
+  0% {
+    opacity: 1;
+    transform: translateY(-100px) rotatey(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(50vh) rotatey(720deg);
+  }
+}
+
+.defensa-moneda:nth-child(1) {
+  left: 25%;
+}
+
+.defensa-moneda:nth-child(2) {
+  left: 50%;
+}
+
+.defensa-moneda:nth-child(3) {
+  left: 75%;
+}

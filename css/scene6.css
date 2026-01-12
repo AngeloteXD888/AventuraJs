@@ -30,3 +30,110 @@
   color: var(--text-primary);
   border: 2px solid var(--accent-secondary);
 }
+
+/* ---------------------------- TABLA RANKING ---------------------------- */
+
+.ranking-container {
+  margin: 24px auto;
+  max-width: 800px;
+  overflow-x: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ranking-table {
+  width: 100%;
+  max-width: 700px;
+  background: var(--primary-color);
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid var(--accent-secondary);
+  margin: 0 auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.ranking-table thead {
+  background: var(--accent-color);
+  color: var(--primary-color);
+}
+
+.ranking-table th {
+  padding: 18px 16px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.ranking-table tbody tr {
+  border-bottom: 1px solid var(--secondary-color);
+  transition: background-color 0.3s ease;
+}
+
+.ranking-table tbody tr:hover {
+  background: rgba(0, 229, 255, 0.1);
+}
+
+.ranking-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.ranking-table td {
+  padding: 16px;
+  color: var(--text-primary);
+  font-size: 1rem;
+  text-align: center;
+}
+
+.ranking-table td:first-child {
+  font-weight: bold;
+  color: var(--accent-color);
+}
+
+.ranking-table tbody tr:nth-child(1) {
+  background: rgba(255, 204, 0, 0.2);
+}
+
+.ranking-table tbody tr:nth-child(2) {
+  background: rgba(192, 192, 192, 0.2);
+}
+
+.ranking-table tbody tr:nth-child(3) {
+  background: rgba(205, 127, 50, 0.2);
+}
+
+.btn-secondary {
+  background: var(--accent-secondary);
+  color: var(--primary-color);
+  border: none;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background: var(--success-color);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .ranking-table {
+    max-width: 100%;
+  }
+
+  .ranking-table th,
+  .ranking-table td {
+    padding: 12px 8px;
+    font-size: 0.9rem;
+  }
+
+  .ranking-table th {
+    font-size: 0.95rem;
+  }
+}

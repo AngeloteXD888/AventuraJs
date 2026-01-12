@@ -14,18 +14,21 @@ export function distinguirJugador(puntuacion, umbral = UMBRAL_VETERANO) {
  * Guarda el registro del jugador en LocalStorage
  * @param {string} nombre - Nombre del jugador
  * @param {number} puntuacion - Puntuación del jugador
- * @param {number} monedas - Monedas del jugador
+ * @param {number} dinero - Dinero del jugador en céntimos
  */
-export function guardarRanking(nombre, puntuacion, monedas) {
+export function guardarRanking(nombre, puntuacion, dinero) {
   // Obtener ranking actual o crear array vacío
   let ranking = obtenerRanking();
+  
+  // Calcular puntuación total: puntos + dinero restante en céntimos
+  const puntuacionTotal = puntuacion + dinero;
   
   // Añadir nuevo registro
   const nuevoRegistro = {
     nombre: nombre,
     puntuacion: puntuacion,
-    monedas: monedas,
-    puntuacionTotal: puntuacion + monedas,
+    dinero: dinero, // Guardamos en céntimos
+    puntuacionTotal: puntuacionTotal,
     fecha: new Date().toISOString()
   };
   
@@ -58,23 +61,23 @@ export function mostrarRankingConsola() {
     return;
   }
   
-  console.log('═══════════════════════════════════════════════════════');
-  console.log('                    RANKING DE JUGADORES                ');
-  console.log('═══════════════════════════════════════════════════════');
-  console.log('Pos | Nombre              | Puntuación | Monedas | Total');
-  console.log('───────────────────────────────────────────────────────');
+  console.log('═══════════════════════════════════════════════════════════════');
+  console.log('                    RANKING DE JUGADORES                        ');
+  console.log('═══════════════════════════════════════════════════════════════');
+  console.log('Pos | Nombre              | Puntuación | Dinero    | Total     ');
+  console.log('────────────────────────────────────────────────────────────────');
   
   ranking.forEach((registro, index) => {
     const pos = (index + 1).toString().padStart(3, ' ');
     const nombre = registro.nombre.padEnd(20, ' ').substring(0, 20);
     const puntos = registro.puntuacion.toString().padStart(10, ' ');
-    const monedas = registro.monedas.toString().padStart(7, ' ');
-    const total = registro.puntuacionTotal.toString().padStart(5, ' ');
+    const dineroFormateado = `${(registro.dinero / 100).toFixed(2)}€`.padStart(10, ' ');
+    const total = registro.puntuacionTotal.toString().padStart(10, ' ');
     
-    console.log(`${pos} | ${nombre} | ${puntos} | ${monedas} | ${total}`);
+    console.log(`${pos} | ${nombre} | ${puntos} | ${dineroFormateado} | ${total}`);
   });
   
-  console.log('═══════════════════════════════════════════════════════');
+  console.log('═══════════════════════════════════════════════════════════════');
 }
 
 /**
