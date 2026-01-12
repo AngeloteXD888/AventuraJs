@@ -1,0 +1,66 @@
+/* ---------------------------- MONEDERO ---------------------------- */
+
+.monedero {
+  position: fixed;
+  left: 2%;
+  bottom: 1%;
+  width: 120px;
+  height: 120px;
+  z-index: 1000;
+  opacity: 0;
+  transform: translateX(-200%);
+}
+
+.monedero.show {
+  animation: slideInMonedero 1s ease forwards;
+}
+
+@keyframes slideInMonedero {
+  from {
+    opacity: 0;
+    transform: translateX(-200%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.monedero img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.monedero span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--primary-color);
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 768px) {
+  .monedero {
+    width: 100px;
+    height: 100px;
+  }
+
+  .monedero span {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .monedero {
+    width: 80px;
+    height: 80px;
+  }
+
+  .monedero span {
+    font-size: 0.9rem;
+  }
+}

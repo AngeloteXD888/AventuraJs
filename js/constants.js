@@ -8,6 +8,9 @@ export const PUNTUACION_BASE = 100;
 // Umbral por defecto para distinguir veterano/novato
 export const UMBRAL_VETERANO = 500;
 
+// Dinero inicial del jugador (50€)
+export const DINERO_INICIAL = 5000;
+
 // Rarezas de productos
 export const RAREZA = {
   COMUN: 'Común',

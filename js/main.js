@@ -3,7 +3,7 @@ import { Producto } from './clases/Producto.js';
 import { Enemigo } from './clases/Enemigo.js';
 import { Jefe } from './clases/Jefe.js';
 import { combate } from './modulos/Batalla.js';
-import { distinguirJugador } from './modulos/Ranking.js';
+import { distinguirJugador, guardarRanking, obtenerRanking, mostrarRankingConsola } from './modulos/Ranking.js';
 import { showScene, randomElement, formatearPrecio } from './utils.js';
 import { RAREZA } from './constants.js';
 
@@ -17,11 +17,28 @@ let carritoCompra = [];
  * Inicializa el juego
  */
 function inicializarJuego() {
-  jugador = new Jugador('Crypto', './img/avatar/Avatar.png', 100);
-  cargarEnemigosDesdeHTML();
   enemigoActualIndex = 0;
   carritoCompra = [];
-  mostrarEscena1();
+  cargarEnemigosDesdeHTML();
+  mostrarEscena0();
+  ocultarMonedero();
+}
+
+/**
+ * Muestra u oculta el monedero
+ */
+function mostrarMonedero() {
+  const monedero = document.getElementById('monedero');
+  monedero.classList.add('show');
+}
+
+function ocultarMonedero() {
+  const monedero = document.getElementById('monedero');
+  monedero.classList.remove('show');
+}
+
+function actualizarMonedero() {
+  document.getElementById('monedero-cantidad').textContent = formatearPrecio(jugador.dinero);
 }
 
 /**
@@ -49,14 +66,163 @@ function cargarEnemigosDesdeHTML() {
 }
 
 /**
+ * ESCENA 0: FORMULARIO CREAR JUGADOR
+ */
+function mostrarEscena0() {
+  showScene('scene-0');
+  
+  const form = document.getElementById('form-crear-jugador');
+  const inputNombre = document.getElementById('input-nombre');
+  const inputAtaque = document.getElementById('input-ataque');
+  const inputDefensa = document.getElementById('input-defensa');
+  const inputVida = document.getElementById('input-vida');
+  const puntosRestantes = document.getElementById('puntos-restantes');
+  
+  // Resetear valores
+  inputNombre.value = '';
+  inputAtaque.value = 0;
+  inputDefensa.value = 0;
+  inputVida.value = 0;
+  puntosRestantes.textContent = '10';
+  limpiarErrores();
+  
+  // Botones de incrementar/decrementar
+  const botonesIncrease = document.querySelectorAll('.btn-increase');
+  const botonesDecrease = document.querySelectorAll('.btn-decrease');
+  
+  botonesIncrease.forEach(btn => {
+    btn.onclick = function() {
+      const targetId = this.dataset.target;
+      const input = document.getElementById(targetId);
+      incrementarStat(input, puntosRestantes);
+    };
+  });
+  
+  botonesDecrease.forEach(btn => {
+    btn.onclick = function() {
+      const targetId = this.dataset.target;
+      const input = document.getElementById(targetId);
+      decrementarStat(input, puntosRestantes);
+    };
+  });
+  
+  // Submit del formulario
+  form.onsubmit = function(e) {
+    e.preventDefault();
+    
+    if (validarFormulario()) {
+      const nombre = inputNombre.value.trim();
+      const ataque = parseInt(inputAtaque.value);
+      const defensa = parseInt(inputDefensa.value);
+      const vidaExtra = parseInt(inputVida.value);
+      
+      jugador = new Jugador(nombre, './img/avatar/Avatar.png', 100 + vidaExtra, ataque, defensa);
+      
+      mostrarEscena1();
+    }
+  };
+}
+
+/**
+ * Incrementa un stat si hay puntos disponibles
+ */
+function incrementarStat(input, puntosDisplay) {
+  const puntosActuales = parseInt(puntosDisplay.textContent);
+  const valorActual = parseInt(input.value);
+  
+  if (puntosActuales > 0 && valorActual < 10) {
+    input.value = valorActual + 1;
+    puntosDisplay.textContent = puntosActuales - 1;
+  }
+}
+
+/**
+ * Decrementa un stat
+ */
+function decrementarStat(input, puntosDisplay) {
+  const puntosActuales = parseInt(puntosDisplay.textContent);
+  const valorActual = parseInt(input.value);
+  
+  if (valorActual > 0) {
+    input.value = valorActual - 1;
+    puntosDisplay.textContent = puntosActuales + 1;
+  }
+}
+
+/**
+ * Valida el formulario de creación de jugador
+ */
+function validarFormulario() {
+  limpiarErrores();
+  let esValido = true;
+  
+  const nombre = document.getElementById('input-nombre').value.trim();
+  const ataque = parseInt(document.getElementById('input-ataque').value);
+  const defensa = parseInt(document.getElementById('input-defensa').value);
+  const vida = parseInt(document.getElementById('input-vida').value);
+  const puntosRestantes = parseInt(document.getElementById('puntos-restantes').textContent);
+  
+  // Validar nombre con regex
+  // Regex: primera letra mayúscula, solo letras y espacios, máximo 20 caracteres, no solo espacios
+  const regexNombre = /^[A-ZÁÉÍÓÚÑ][a-záéíóúñA-ZÁÉÍÓÚÑ\s]{0,19}$/;
+  
+  if (nombre === '') {
+    mostrarError('error-nombre', 'El nombre es obligatorio');
+    esValido = false;
+  } else if (/^\s+$/.test(nombre)) {
+    mostrarError('error-nombre', 'El nombre no puede contener solo espacios');
+    esValido = false;
+  } else if (!regexNombre.test(nombre)) {
+    mostrarError('error-nombre', 'Primera letra mayúscula, solo letras y espacios, máx 20 caracteres');
+    esValido = false;
+  }
+  
+  // Validar que se hayan usado todos los puntos
+  if (puntosRestantes !== 0) {
+    mostrarError('error-ataque', 'Debes distribuir todos los 10 puntos');
+    esValido = false;
+  }
+  
+  // Validar que los valores sean válidos
+  if (ataque < 0 || defensa < 0 || vida < 0) {
+    mostrarError('error-ataque', 'Los valores no pueden ser negativos');
+    esValido = false;
+  }
+  
+  // Validar que la suma no supere 10
+  if (ataque + defensa + vida > 10) {
+    mostrarError('error-ataque', 'La suma total no puede superar 10 puntos');
+    esValido = false;
+  }
+  
+  return esValido;
+}
+
+function mostrarError(idError, mensaje) {
+  document.getElementById(idError).textContent = mensaje;
+}
+
+function limpiarErrores() {
+  const errores = document.querySelectorAll('.error-message');
+  errores.forEach(error => error.textContent = '');
+}
+
+/**
  * Muestra la escena 1 (inicio)
  */
 function mostrarEscena1() {
   showScene('scene-1');
+  mostrarMonedero();
+  actualizarMonedero();
   
   document.getElementById('player-name').textContent = jugador.nombre;
   document.getElementById('player-avatar').src = jugador.avatar;
-  actualizarEstadisticas('');
+  
+  // Actualizar estadísticas manualmente con formato correcto
+  document.getElementById('stat-attack').textContent = `Ataque: ${jugador.obtenerAtaqueTotal()}`;
+  document.getElementById('stat-defense').textContent = `Defensa: ${jugador.obtenerDefensaTotal()}`;
+  document.getElementById('stat-life').textContent = `Vida: ${jugador.obtenerVidaTotal()}`;
+  document.getElementById('stat-money').textContent = `Dinero: ${formatearPrecio(jugador.dinero)}`;
   
   document.getElementById('inventory-container').innerHTML = '';
   
@@ -77,6 +243,12 @@ function actualizarEstadisticas(sufijo) {
     `Defensa: ${jugador.obtenerDefensaTotal()}`;
   document.getElementById(`stat-life${sufijo}`).textContent = 
     `Vida: ${jugador.obtenerVidaTotal()}`;
+  
+  // Actualizar dinero si existe el elemento
+  const statMoney = document.getElementById(`stat-money${sufijo}`);
+  if (statMoney) {
+    statMoney.textContent = `Dinero: ${formatearPrecio(jugador.dinero)}`;
+  }
 }
 
 /**
@@ -84,6 +256,7 @@ function actualizarEstadisticas(sufijo) {
  */
 function mostrarEscena2() {
   showScene('scene-2');
+  actualizarMonedero();
   
   const rarezas = Object.values(RAREZA);
   const rarezaDescuento = randomElement(rarezas);
@@ -92,6 +265,8 @@ function mostrarEscena2() {
   
   document.getElementById('discount-message').textContent = 
     `¡20% de descuento en productos ${rarezaDescuento}!`;
+  
+  actualizarDineroDisponible();
   
   const productCards = document.querySelectorAll('.product-card');
   productCards.forEach(card => {
@@ -108,7 +283,7 @@ function mostrarEscena2() {
   document.getElementById('cart-container').innerHTML = '';
   carritoCompra = [];
   
-    const btn2 = document.getElementById('btn-scene-2');
+  const btn2 = document.getElementById('btn-scene-2');
   btn2.onclick = function() {
     if (carritoCompra.length === 0) {
       alert('¡Debes comprar al menos un artículo antes de continuar!');
@@ -117,6 +292,39 @@ function mostrarEscena2() {
     carritoCompra.forEach(producto => jugador.añadirObjeto(producto));
     mostrarEscena3();
   };
+}
+
+/**
+ * Actualiza el dinero disponible en el mercado
+ */
+function actualizarDineroDisponible() {
+  const totalCarrito = calcularTotalCarrito();
+  const dineroDisponible = jugador.dinero - totalCarrito;
+  document.getElementById('dinero-disponible').textContent = formatearPrecio(dineroDisponible);
+  
+  // Deshabilitar productos que no se pueden comprar
+  const productCards = document.querySelectorAll('.product-card');
+  productCards.forEach(card => {
+    const precioActual = parseInt(card.dataset.precioActual || card.dataset.precio);
+    const estaEnCarrito = carritoCompra.some(p => p.nombre === card.dataset.nombre);
+    
+    if (!estaEnCarrito && precioActual > dineroDisponible) {
+      card.classList.add('disabled');
+      card.querySelector('.btn-add').disabled = true;
+    } else if (!estaEnCarrito) {
+      card.classList.remove('disabled');
+      card.querySelector('.btn-add').disabled = false;
+    }
+  });
+}
+
+/**
+ * Calcula el total del carrito
+ */
+function calcularTotalCarrito() {
+  return carritoCompra.reduce((total, producto) => {
+    return total + producto.precio;
+  }, 0);
 }
 
 /**
@@ -148,19 +356,27 @@ function aplicarDescuentoHTML(rareza, descuento) {
 function toggleProducto(card) {
   const button = card.querySelector('.btn-add');
   const imgSrc = card.querySelector('img').src;
+  const precioActual = parseInt(card.dataset.precioActual || card.dataset.precio);
   
   const producto = new Producto(
-  card.dataset.nombre,
-  imgSrc,
-  parseInt(card.dataset.precio),
-  card.dataset.rareza,
-  card.dataset.tipo,
-  parseInt(card.dataset.bonus)
-);
+    card.dataset.nombre,
+    imgSrc,
+    precioActual,
+    card.dataset.rareza,
+    card.dataset.tipo,
+    parseInt(card.dataset.bonus)
+  );
   
   const indexEnCarrito = carritoCompra.findIndex(p => p.nombre === producto.nombre);
   
   if (indexEnCarrito === -1) {
+    // Verificar si hay suficiente dinero
+    const totalCarrito = calcularTotalCarrito();
+    if (jugador.dinero - totalCarrito < precioActual) {
+      alert('¡No tienes suficiente dinero para comprar este producto!');
+      return;
+    }
+    
     carritoCompra.push(producto);
     card.classList.add('selected');
     button.textContent = 'Retirar';
@@ -180,17 +396,30 @@ function toggleProducto(card) {
     const cartItem = document.querySelector(`#cart-container .cart-item[data-nombre="${producto.nombre}"]`);
     if (cartItem) cartItem.remove();
   }
+  
+  // Actualizar dinero disponible después de cada cambio
+  actualizarDineroDisponible();
 }
 
 /**
  * Muestra la escena 3 (estado actualizado)
  */
 function mostrarEscena3() {
+  // Restar el dinero gastado
+  const totalGastado = calcularTotalCarrito();
+  jugador.restarDinero(totalGastado);
+  
   showScene('scene-3');
+  actualizarMonedero();
   
   document.getElementById('player-name-3').textContent = jugador.nombre;
   document.getElementById('player-avatar-3').src = jugador.avatar;
-  actualizarEstadisticas('-3');
+  
+  // Actualizar estadísticas manualmente con formato correcto
+  document.getElementById('stat-attack-3').textContent = `Ataque: ${jugador.obtenerAtaqueTotal()}`;
+  document.getElementById('stat-defense-3').textContent = `Defensa: ${jugador.obtenerDefensaTotal()}`;
+  document.getElementById('stat-life-3').textContent = `Vida: ${jugador.obtenerVidaTotal()}`;
+  document.getElementById('stat-money-3').textContent = `Dinero: ${formatearPrecio(jugador.dinero)}`;
   
   const inventoryDisplay = document.getElementById('inventory-display');
   inventoryDisplay.innerHTML = '';
@@ -237,52 +466,63 @@ function iniciarBatalla() {
 }
 
 /**
+ * Muestra animación de monedas tras victoria
+ */
+function mostrarAnimacionMonedas() {
+  const monedas = `
+    <img src="./img/moneda.png" alt="moneda" class="moneda">
+    <img src="./img/moneda.png" alt="moneda" class="moneda">
+    <img src="./img/moneda.png" alt="moneda" class="moneda">
+  `;
+  document.body.insertAdjacentHTML('beforeend', monedas);
+  
+  // Eliminar las monedas después de la animación
+  setTimeout(() => {
+    const monedasElements = document.querySelectorAll('.moneda');
+    monedasElements.forEach(m => m.remove());
+  }, 3000);
+}
+
+/**
  * Muestra la escena 5 (batalla) con animaciones
  * @param {Enemigo} enemigo - Enemigo actual
  * @param {Object} resultado - Resultado del combate
  */
 function mostrarEscena5(enemigo, resultado) {
   showScene('scene-5');
+  actualizarMonedero();
   
-  // REINICIAR ANIMACIONES: Remover y volver a añadir las clases
+  // REINICIAR ANIMACIONES
   const fighterPlayer = document.querySelector('.fighter-player');
   const fighterEnemy = document.querySelector('.fighter-enemy');
   
-  // Remover las clases de animación
   fighterPlayer.classList.remove('fighter-player');
   fighterEnemy.classList.remove('fighter-enemy');
   
-  // Forzar reflujo del DOM para reiniciar la animación
   void fighterPlayer.offsetWidth;
   void fighterEnemy.offsetWidth;
   
-  // Volver a añadir las clases de animación
   fighterPlayer.classList.add('fighter-player');
   fighterEnemy.classList.add('fighter-enemy');
   
-  // Mostrar nombre del enemigo
+  // Mostrar información
   document.getElementById('battle-enemy-name').textContent = enemigo.nombre;
   document.getElementById('battle-enemy-name-display').textContent = enemigo.nombre;
-  
-  // Mostrar avatar del enemigo
   document.getElementById('battle-enemy-avatar').src = enemigo.avatar;
-  
-  // Mostrar estadísticas del enemigo
   document.getElementById('battle-enemy-attack').textContent = enemigo.ataque;
   document.getElementById('battle-enemy-defense').textContent = enemigo.defensa;
   document.getElementById('battle-enemy-life').textContent = enemigo.vidaMaxima;
   
-  // Mostrar información del jugador
   document.getElementById('battle-player-avatar').src = jugador.avatar;
   document.getElementById('battle-player-name').textContent = jugador.nombre;
   document.getElementById('battle-player-attack').textContent = jugador.obtenerAtaqueTotal();
   document.getElementById('battle-player-defense').textContent = jugador.obtenerDefensaTotal();
   document.getElementById('battle-player-life').textContent = jugador.obtenerVidaTotal();
   
-  // Mostrar log de batalla
+  // Mostrar log
   const battleLog = document.getElementById('battle-log');
   battleLog.innerHTML = '';
-  battleLog.scrollTop = 0; // Resetear scroll del log
+  battleLog.scrollTop = 0;
   
   resultado.log.forEach(linea => {
     const p = document.createElement('p');
@@ -290,7 +530,6 @@ function mostrarEscena5(enemigo, resultado) {
     battleLog.appendChild(p);
   });
   
-  // Resetear scroll de la escena también
   const scene5 = document.getElementById('scene-5');
   scene5.scrollTop = 0;
   
@@ -300,9 +539,14 @@ function mostrarEscena5(enemigo, resultado) {
     resultDiv.innerHTML = `
       <h2>¡VICTORIA!</h2>
       <p>Has ganado ${resultado.puntosObtenidos} puntos</p>
+      <p>Has obtenido ${formatearPrecio(resultado.monedasObtenidas)}</p>
       <p>Puntos totales: ${jugador.puntos}</p>
+      <p>Dinero total: ${formatearPrecio(jugador.dinero)}</p>
     `;
     resultDiv.className = 'battle-result victory';
+    
+    // Mostrar animación de monedas
+    mostrarAnimacionMonedas();
     
     const btnContinue = document.getElementById('btn-scene-5');
     btnContinue.textContent = 'Continuar';
@@ -315,6 +559,7 @@ function mostrarEscena5(enemigo, resultado) {
       <h2>DERROTA</h2>
       <p>Has sido derrotado...</p>
       <p>Puntos totales: ${jugador.puntos}</p>
+      <p>Dinero total: ${formatearPrecio(jugador.dinero)}</p>
     `;
     resultDiv.className = 'battle-result defeat';
     
@@ -327,14 +572,23 @@ function mostrarEscena5(enemigo, resultado) {
 }
 
 /**
- * Muestra la escena final
+ * Muestra la escena final con ranking
  */
 function mostrarEscenaFinal() {
   showScene('scene-6');
   
-  const rango = distinguirJugador(jugador.puntos);
+  // Calcular puntuación total (puntos + dinero en euros)
+  const dineroEnEuros = Math.floor(jugador.dinero / 100);
+  const puntuacionTotal = jugador.puntos + dineroEnEuros;
+  const rango = distinguirJugador(puntuacionTotal);
   
+  // Guardar en ranking
+  guardarRanking(jugador.nombre, jugador.puntos, jugador.dinero);
+  
+  // Mostrar resultados
   document.getElementById('final-points').textContent = jugador.puntos;
+  document.getElementById('final-money').textContent = formatearPrecio(jugador.dinero);
+  document.getElementById('final-total').textContent = puntuacionTotal;
   document.getElementById('final-rank').textContent = rango;
   
   const rankDisplay = document.getElementById('final-rank');
@@ -344,21 +598,57 @@ function mostrarEscenaFinal() {
     rankDisplay.className = 'final-rank rank-novice';
   }
   
+  // Cargar y mostrar tabla de ranking
+  mostrarTablaRanking();
+  
+  // Botón ver ranking en consola
+  const btnVerRanking = document.getElementById('btn-ver-ranking');
+  btnVerRanking.onclick = function() {
+    mostrarRankingConsola();
+  };
+  
+  // Botón reiniciar
   const btnRestart = document.getElementById('btn-restart');
   btnRestart.onclick = function() {
     inicializarJuego();
   };
 
-if (rango === 'Veterano') {
-  confetti({
-    particleCount: 600,
-    spread: 150,
-    origin: { y: 0.6 }
+  if (rango === 'Veterano') {
+    confetti({
+      particleCount: 600,
+      spread: 150,
+      origin: { y: 0.6 }
+    });
+  }
+}
+
+/**
+ * Muestra la tabla de ranking en la escena final
+ */
+function mostrarTablaRanking() {
+  const ranking = obtenerRanking();
+  const tbody = document.getElementById('ranking-tbody');
+  tbody.innerHTML = '';
+  
+  if (ranking.length === 0) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = '<td colspan="4">No hay registros aún</td>';
+    tbody.appendChild(tr);
+    return;
+  }
+  
+  // Mostrar máximo 10 registros
+  ranking.slice(0, 10).forEach((registro, index) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${index + 1}</td>
+      <td>${registro.nombre}</td>
+      <td>${registro.puntuacion}</td>
+      <td>${formatearPrecio(registro.dinero)}</td>
+    `;
+    tbody.appendChild(tr);
   });
 }
-}
-
-
 
 // Iniciar el juego cuando cargue la página
 window.addEventListener('DOMContentLoaded', inicializarJuego);

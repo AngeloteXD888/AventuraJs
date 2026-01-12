@@ -5,21 +5,81 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Aventura en el Reino de JS</title>
   <link rel="stylesheet" href="./css/global.css">
+  <link rel="stylesheet" href="./css/scene0.css">
   <link rel="stylesheet" href="./css/scene1.css">
   <link rel="stylesheet" href="./css/scene2.css">
   <link rel="stylesheet" href="./css/scene3.css">
   <link rel="stylesheet" href="./css/scene4.css">
   <link rel="stylesheet" href="./css/scene5.css">
   <link rel="stylesheet" href="./css/scene6.css">
+  <link rel="stylesheet" href="./css/monedero.css">
+  <link rel="stylesheet" href="./css/monedas.css">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
+  <!-- MONEDERO (visible en todo momento) -->
+  <div id="monedero" class="monedero">
+    <img src="./img/monedero.png" alt="Monedero">
+    <span id="monedero-cantidad">50,00€</span>
+  </div>
+
   <header>
     <h1>Aventura en el Reino de JS</h1>
   </header>
   <main>
+    <!-- ESCENA 0: FORMULARIO CREAR JUGADOR -->
+    <div id="scene-0" class="scene active">
+      <h2>Crear Jugador</h2>
+      <form id="form-crear-jugador" class="form-jugador">
+        <div class="form-group">
+          <label for="input-nombre">Nombre del jugador:</label>
+          <input type="text" id="input-nombre" placeholder="Ej: Crypto" maxlength="20" required>
+          <span class="error-message" id="error-nombre"></span>
+        </div>
+
+        <div class="stats-distribution">
+          <p>Distribuye 10 puntos entre Ataque, Defensa y Vida (Vida base: 100)</p>
+          <p class="points-remaining">Puntos restantes: <span id="puntos-restantes">10</span></p>
+          
+          <div class="form-group">
+            <label for="input-ataque">Ataque:</label>
+            <div class="input-number-controls">
+              <button type="button" class="btn-decrease" data-target="input-ataque">-</button>
+              <input type="number" id="input-ataque" value="0" min="0" max="10" readonly>
+              <button type="button" class="btn-increase" data-target="input-ataque">+</button>
+            </div>
+            <span class="error-message" id="error-ataque"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="input-defensa">Defensa:</label>
+            <div class="input-number-controls">
+              <button type="button" class="btn-decrease" data-target="input-defensa">-</button>
+              <input type="number" id="input-defensa" value="0" min="0" max="10" readonly>
+              <button type="button" class="btn-increase" data-target="input-defensa">+</button>
+            </div>
+            <span class="error-message" id="error-defensa"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="input-vida">Vida adicional:</label>
+            <div class="input-number-controls">
+              <button type="button" class="btn-decrease" data-target="input-vida">-</button>
+              <input type="number" id="input-vida" value="0" min="0" max="10" readonly>
+              <button type="button" class="btn-increase" data-target="input-vida">+</button>
+            </div>
+            <span class="error-message" id="error-vida"></span>
+          </div>
+        </div>
+
+        <div class="button-container">
+          <button type="submit" class="btn-primary">Comenzar Aventura</button>
+        </div>
+      </form>
+    </div>
+
     <!-- ESCENA 1: INICIO -->
-    <div id="scene-1" class="scene active">
+    <div id="scene-1" class="scene">
       <div class="player-info">
         <img id="player-avatar" src="./img/avatar/Avatar.png" alt="Avatar del jugador">
         <h2 id="player-name">Crypto</h2>
@@ -34,6 +94,9 @@
         <div class="stat-box">
           <p id="stat-life">Vida: 100</p>
         </div>
+        <div class="stat-box">
+          <p id="stat-money">Dinero: 50,00€</p>
+        </div>
       </div>
       <div class="button-container">
         <button id="btn-scene-1" class="btn-primary">Ir al Mercado</button>
@@ -44,6 +107,9 @@
     <div id="scene-2" class="scene">
       <h2>Mercado</h2>
       <p id="discount-message" class="discount-banner"></p>
+      <div class="dinero-disponible">
+        <p>Dinero disponible: <span id="dinero-disponible">50,00€</span></p>
+      </div>
       
       <div id="product-container" class="product-grid">
         <!-- ARMAS -->
@@ -185,6 +251,9 @@
         <div class="stat-box">
           <p id="stat-life-3">Vida: 100</p>
         </div>
+        <div class="stat-box">
+          <p id="stat-money-3">Dinero: 50,00€</p>
+        </div>
       </div>
       
       <h3>Inventario:</h3>
@@ -240,64 +309,77 @@
     </div>
 
     <!-- ESCENA 5: BATALLA -->
-<div id="scene-5" class="scene">
-  <h2>Batalla</h2>
-  
-  <!-- Encabezado con nombre del enemigo -->
-  <div class="battle-header">
-    <h3>Enfrentando a: <span id="battle-enemy-name"></span></h3>
-  </div>
-  
-  <!-- Combatientes con animaciones -->
-  <div class="battle-fighters">
-    <!-- Jugador (izquierda) -->
-    <div class="fighter fighter-player">
-      <img id="battle-player-avatar" src="./img/avatar/Avatar.png" alt="Jugador">
-      <h4 id="battle-player-name">Crypto</h4>
-      <div class="fighter-stats">
-        <p>Ataque: <span id="battle-player-attack">0</span></p>
-        <p>Defensa: <span id="battle-player-defense">0</span></p>
-        <p>Vida: <span id="battle-player-life">100</span></p>
+    <div id="scene-5" class="scene">
+      <h2>Batalla</h2>
+      
+      <div class="battle-header">
+        <h3>Enfrentando a: <span id="battle-enemy-name"></span></h3>
+      </div>
+      
+      <div class="battle-fighters">
+        <div class="fighter fighter-player">
+          <img id="battle-player-avatar" src="./img/avatar/Avatar.png" alt="Jugador">
+          <h4 id="battle-player-name">Crypto</h4>
+          <div class="fighter-stats">
+            <p>Ataque: <span id="battle-player-attack">0</span></p>
+            <p>Defensa: <span id="battle-player-defense">0</span></p>
+            <p>Vida: <span id="battle-player-life">100</span></p>
+          </div>
+        </div>
+        
+        <div class="battle-vs">VS</div>
+        
+        <div class="fighter fighter-enemy">
+          <img id="battle-enemy-avatar" src="" alt="Enemigo">
+          <h4 id="battle-enemy-name-display"></h4>
+          <div class="fighter-stats">
+            <p>Ataque: <span id="battle-enemy-attack">0</span></p>
+            <p>Defensa: <span id="battle-enemy-defense">0</span></p>
+            <p>Vida: <span id="battle-enemy-life">0</span></p>
+          </div>
+        </div>
+      </div>
+      
+      <div id="battle-log" class="battle-log"></div>
+      
+      <div id="battle-result" class="battle-result"></div>
+      
+      <div class="button-container">
+        <button id="btn-scene-5" class="btn-primary">Continuar</button>
       </div>
     </div>
-    
-    <!-- VS -->
-    <div class="battle-vs">VS</div>
-    
-    <!-- Enemigo (derecha) -->
-    <div class="fighter fighter-enemy">
-      <img id="battle-enemy-avatar" src="" alt="Enemigo">
-      <h4 id="battle-enemy-name-display"></h4>
-      <div class="fighter-stats">
-        <p>Ataque: <span id="battle-enemy-attack">0</span></p>
-        <p>Defensa: <span id="battle-enemy-defense">0</span></p>
-        <p>Vida: <span id="battle-enemy-life">0</span></p>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Log de batalla -->
-  <div id="battle-log" class="battle-log"></div>
-  
-  <!-- Resultado -->
-  <div id="battle-result" class="battle-result"></div>
-  
-  <!-- Botón continuar -->
-  <div class="button-container">
-    <button id="btn-scene-5" class="btn-primary">Continuar</button>
-  </div>
-</div>
 
-    <!-- ESCENA 6: FINAL -->
+    <!-- ESCENA 6: FINAL CON RANKING -->
     <div id="scene-6" class="scene">
       <h2>¡Aventura completada!</h2>
       <div class="final-stats">
         <h3>Puntuación final:</h3>
         <p class="final-points"><span id="final-points">0</span> puntos</p>
+        <p class="final-money">Dinero restante: <span id="final-money">0,00€</span></p>
+        <p class="final-total">Puntuación total: <span id="final-total">0</span></p>
         <h3>Rango:</h3>
         <p class="final-rank" id="final-rank">Novato</p>
       </div>
+
+      <h3>Ranking de Jugadores</h3>
+      <div class="ranking-container">
+        <table id="ranking-table" class="ranking-table">
+          <thead>
+            <tr>
+              <th>Posición</th>
+              <th>Nombre</th>
+              <th>Puntuación</th>
+              <th>Dinero</th>
+            </tr>
+          </thead>
+          <tbody id="ranking-tbody">
+            <!-- Se llenará dinámicamente -->
+          </tbody>
+        </table>
+      </div>
+
       <div class="button-container">
+        <button id="btn-ver-ranking" class="btn-secondary">Ver Ranking en Consola</button>
         <button id="btn-restart" class="btn-primary">Jugar de nuevo</button>
       </div>
     </div>

@@ -50,28 +50,36 @@ export function combate(enemigo, jugador) {
   }
   
   // Determinar ganador y calcular puntos
-  let ganador, puntosObtenidos;
+  let ganador, puntosObtenidos, dineroObtenido;
   
   if (jugador.vida > 0) {
     ganador = 'jugador';
     puntosObtenidos = PUNTUACION_BASE + ataqueEnemigo;
+    dineroObtenido = 50;
     
     // Si es un jefe, multiplicar los puntos
     if (enemigo instanceof Jefe) {
       puntosObtenidos = Math.round(puntosObtenidos * enemigo.multiplicadorDano);
+      dineroObtenido = 5;
       log.push(`¡Has derrotado a un JEFE! Puntos x${enemigo.multiplicadorDano}`);
+      log.push(`Dinero obtenido x${enemigo.multiplicadorDano} €`)
     }
     
     jugador.sumarPuntos(puntosObtenidos);
+    jugador.sumarPuntos(dineroObtenido);
     log.push(`Has ganado ${puntosObtenidos} puntos.`);
+    log.push(`Dinero obtenido ${dineroObtenido} €`)
+
   } else {
     ganador = 'enemigo';
     puntosObtenidos = 0;
+    dineroObtenido = 0;
   }
   
   return {
     ganador,
     puntosObtenidos,
+    dineroObtenido,
     log
   };
 }
