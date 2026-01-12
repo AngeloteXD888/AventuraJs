@@ -21,7 +21,10 @@ function inicializarJuego() {
   carritoCompra = [];
   cargarEnemigosDesdeHTML();
   mostrarEscena0();
-  ocultarMonedero();
+  // CAMBIO: Mostrar monedero desde el principio
+  mostrarMonedero();
+  // Inicializar con dinero por defecto
+  actualizarMonederoInicial();
 }
 
 /**
@@ -39,6 +42,11 @@ function ocultarMonedero() {
 
 function actualizarMonedero() {
   document.getElementById('monedero-cantidad').textContent = formatearPrecio(jugador.dinero);
+}
+
+// Nueva función para actualizar el monedero con el valor inicial
+function actualizarMonederoInicial() {
+  document.getElementById('monedero-cantidad').textContent = '50,00€';
 }
 
 /**
@@ -212,7 +220,6 @@ function limpiarErrores() {
  */
 function mostrarEscena1() {
   showScene('scene-1');
-  mostrarMonedero();
   actualizarMonedero();
   
   document.getElementById('player-name').textContent = jugador.nombre;
@@ -467,7 +474,6 @@ function iniciarBatalla() {
 
 /**
  * Muestra animación de 3 monedas cayendo tras victoria
- * REEMPLAZA la función mostrarAnimacionMonedas() en main.js
  */
 function mostrarAnimacionMonedas() {
   const monedasContainer = document.getElementById('monedas-container');
@@ -543,15 +549,20 @@ function mostrarEscena5(enemigo, resultado) {
     `;
     resultDiv.className = 'battle-result victory';
     
-    // Mostrar animación de monedas
-    mostrarAnimacionMonedas();
-    
     const btnContinue = document.getElementById('btn-scene-5');
     btnContinue.textContent = 'Continuar';
     btnContinue.onclick = function() {
       enemigoActualIndex++;
       iniciarBatalla();
     };
+    
+    // IMPORTANTE: Mostrar animación de monedas DESPUÉS de renderizar todo
+    // Usamos setTimeout para asegurar que el DOM esté listo
+    setTimeout(() => {
+      mostrarAnimacionMonedas();
+      console.log('Animación de monedas activada para:', enemigo.nombre, 'Es jefe:', enemigo instanceof Jefe);
+    }, 100);
+    
   } else {
     resultDiv.innerHTML = `
       <h2>DERROTA</h2>
