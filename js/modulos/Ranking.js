@@ -1,6 +1,26 @@
 import { UMBRAL_VETERANO } from '../constants.js';
 
 /**
+ * Datos por defecto del ranking
+ */
+const RANKING_DEFAULT = [
+  { nombre: 'Shadow', puntuacion: 850, dinero: 3200, puntuacionTotal: 4050, fecha: '2026-01-10T10:30:00.000Z' },
+  { nombre: 'Phoenix', puntuacion: 720, dinero: 2800, puntuacionTotal: 3520, fecha: '2026-01-11T14:20:00.000Z' },
+  { nombre: 'Blade', puntuacion: 680, dinero: 2400, puntuacionTotal: 3080, fecha: '2026-01-09T16:45:00.000Z' },
+  { nombre: 'Nova', puntuacion: 620, dinero: 2100, puntuacionTotal: 2720, fecha: '2026-01-12T09:15:00.000Z' }
+];
+
+/**
+ * Inicializa el ranking con datos por defecto si está vacío
+ */
+export function inicializarRanking() {
+  const ranking = localStorage.getItem('rankingJS');
+  if (!ranking) {
+    localStorage.setItem('rankingJS', JSON.stringify(RANKING_DEFAULT));
+  }
+}
+
+/**
  * Distingue al jugador como Veterano o Novato según su puntuación
  * @param {number} puntuacion - Puntuación del jugador
  * @param {number} umbral - Umbral para ser veterano (por defecto desde constants)
@@ -86,4 +106,12 @@ export function mostrarRankingConsola() {
 export function borrarRanking() {
   localStorage.removeItem('rankingJS');
   console.log('Ranking borrado correctamente.');
+}
+
+/**
+ * Resetea el ranking a los valores por defecto
+ */
+export function resetearRanking() {
+  localStorage.setItem('rankingJS', JSON.stringify(RANKING_DEFAULT));
+  console.log('Ranking reseteado a valores por defecto.');
 }
