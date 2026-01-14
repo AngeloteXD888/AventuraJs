@@ -20,10 +20,13 @@ function inicializarJuego() {
   enemigoActualIndex = 0;
   carritoCompra = [];
   cargarEnemigosDesdeHTML();
+  if (jugador) {
+    jugador.inventario = [];
+    actualizarInventarioFooter();
+  }
+  
   mostrarEscena0();
-  // CAMBIO: Mostrar monedero desde el principio
   mostrarMonedero();
-  // Inicializar con dinero por defecto
   actualizarMonederoInicial();
 }
 
@@ -47,6 +50,21 @@ function actualizarMonedero() {
 // Nueva función para actualizar el monedero con el valor inicial
 function actualizarMonederoInicial() {
   document.getElementById('monedero-cantidad').textContent = '50,00€';
+}
+
+/**
+ * Actualiza el inventario del footer
+ */
+function actualizarInventarioFooter() {
+  const inventoryContainer = document.getElementById('inventory-container');
+  inventoryContainer.innerHTML = '';
+  
+  jugador.inventario.forEach(item => {
+    const itemDiv = document.createElement('div');
+    itemDiv.className = 'item';
+    itemDiv.innerHTML = `<img src="${item.imagen}" alt="${item.nombre}">`;
+    inventoryContainer.appendChild(itemDiv);
+  });
 }
 
 /**
@@ -231,7 +249,7 @@ function mostrarEscena1() {
   document.getElementById('stat-life').textContent = `Vida: ${jugador.obtenerVidaTotal()}`;
   document.getElementById('stat-money').textContent = `Dinero: ${formatearPrecio(jugador.dinero)}`;
   
-  document.getElementById('inventory-container').innerHTML = '';
+  actualizarInventarioFooter();
   
   const btn1 = document.getElementById('btn-scene-1');
   btn1.onclick = function() {
@@ -438,6 +456,8 @@ function mostrarEscena3() {
     inventoryDisplay.appendChild(itemDiv);
   });
   
+  actualizarInventarioFooter();
+
   const btn3 = document.getElementById('btn-scene-3');
   btn3.onclick = function() {
     mostrarEscena4();
