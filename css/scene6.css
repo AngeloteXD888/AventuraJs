@@ -31,7 +31,7 @@
   border: 2px solid var(--accent-secondary);
 }
 
-/* ---------------------------- TABLA RANKING ---------------------------- */
+/* ---------------------------- TABLA RANKING CON SCROLL Y CABECERA FIJA ---------------------------- */
 
 .ranking-container {
   margin: 24px auto;
@@ -40,6 +40,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  max-height: 400px; /* IMPORTANTE: Limitar altura para forzar scroll */
+  overflow-y: auto;
 }
 
 .ranking-table {
@@ -54,9 +56,13 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
+/* IMPORTANTE: Cabecera fija al hacer scroll */
 .ranking-table thead {
   background: var(--accent-color);
   color: var(--primary-color);
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .ranking-table th {
@@ -81,6 +87,24 @@
   border-bottom: none;
 }
 
+/* IMPORTANTE: Filas pares e impares con colores diferentes */
+.ranking-table tbody tr:nth-child(even) {
+  background: rgba(28, 46, 74, 0.5); /* Color para filas pares */
+}
+
+.ranking-table tbody tr:nth-child(odd) {
+  background: rgba(10, 20, 40, 0.8); /* Color para filas impares */
+}
+
+/* Mantener hover sobre el color de fondo */
+.ranking-table tbody tr:nth-child(even):hover {
+  background: rgba(0, 229, 255, 0.15);
+}
+
+.ranking-table tbody tr:nth-child(odd):hover {
+  background: rgba(0, 229, 255, 0.12);
+}
+
 .ranking-table td {
   padding: 16px;
   color: var(--text-primary);
@@ -93,16 +117,17 @@
   color: var(--accent-color);
 }
 
-.ranking-table tbody tr:nth-child(1) {
-  background: rgba(255, 204, 0, 0.2);
+/* Destacar las primeras 3 posiciones */
+.ranking-table tbody tr:nth-child(1) td:first-child {
+  color: #FFD700; /* Oro */
 }
 
-.ranking-table tbody tr:nth-child(2) {
-  background: rgba(192, 192, 192, 0.2);
+.ranking-table tbody tr:nth-child(2) td:first-child {
+  color: #C0C0C0; /* Plata */
 }
 
-.ranking-table tbody tr:nth-child(3) {
-  background: rgba(205, 127, 50, 0.2);
+.ranking-table tbody tr:nth-child(3) td:first-child {
+  color: #CD7F32; /* Bronce */
 }
 
 .btn-secondary {
@@ -123,6 +148,10 @@
 }
 
 @media (max-width: 768px) {
+  .ranking-container {
+    max-height: 300px;
+  }
+
   .ranking-table {
     max-width: 100%;
   }

@@ -21,7 +21,10 @@ html {
 }
 
 body {
-  background: var(--primary-color);
+  /* IMPORTANTE: Fondo con patrón de 16x16px que se repite */
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPHJlY3Qgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiBmaWxsPSIjMGExNDI4Ii8+CiAgPHBhdGggZD0iTTAgMGgxNnYxNkgweiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMWMyZTRhIiBzdHJva2Utd2lkdGg9IjAuNSIgb3BhY2l0eT0iMC4zIi8+CiAgPGNpcmNsZSBjeD0iOCIgY3k9IjgiIHI9IjEiIGZpbGw9IiMxYzJlNGEiIG9wYWNpdHk9IjAuNCIvPgo8L3N2Zz4=');
+  background-repeat: repeat;
+  background-size: 16px 16px;
   height: 100vh;
   display: grid;
   grid-template-rows: auto 1fr auto;
@@ -304,6 +307,3 @@ footer {
     font-size: 2.5rem;
   }
 }
-
-
-

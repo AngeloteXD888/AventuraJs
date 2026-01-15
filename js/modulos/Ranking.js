@@ -1,13 +1,24 @@
 import { UMBRAL_VETERANO } from '../constants.js';
 
 /**
- * Datos por defecto del ranking
+ * Datos por defecto del ranking - AUMENTADOS para tener scroll
  */
 const RANKING_DEFAULT = [
   { nombre: 'Shadow', puntuacion: 850, dinero: 3200, puntuacionTotal: 4050, fecha: '2026-01-10T10:30:00.000Z' },
   { nombre: 'Phoenix', puntuacion: 720, dinero: 2800, puntuacionTotal: 3520, fecha: '2026-01-11T14:20:00.000Z' },
   { nombre: 'Blade', puntuacion: 680, dinero: 2400, puntuacionTotal: 3080, fecha: '2026-01-09T16:45:00.000Z' },
-  { nombre: 'Nova', puntuacion: 620, dinero: 2100, puntuacionTotal: 2720, fecha: '2026-01-12T09:15:00.000Z' }
+  { nombre: 'Nova', puntuacion: 620, dinero: 2100, puntuacionTotal: 2720, fecha: '2026-01-12T09:15:00.000Z' },
+  { nombre: 'Viper', puntuacion: 580, dinero: 1900, puntuacionTotal: 2480, fecha: '2026-01-08T11:30:00.000Z' },
+  { nombre: 'Storm', puntuacion: 550, dinero: 1700, puntuacionTotal: 2250, fecha: '2026-01-13T15:45:00.000Z' },
+  { nombre: 'Raven', puntuacion: 520, dinero: 1500, puntuacionTotal: 2020, fecha: '2026-01-07T13:20:00.000Z' },
+  { nombre: 'Titan', puntuacion: 480, dinero: 1300, puntuacionTotal: 1780, fecha: '2026-01-14T08:10:00.000Z' },
+  { nombre: 'Specter', puntuacion: 450, dinero: 1100, puntuacionTotal: 1550, fecha: '2026-01-06T17:30:00.000Z' },
+  { nombre: 'Ghost', puntuacion: 420, dinero: 900, puntuacionTotal: 1320, fecha: '2026-01-05T12:45:00.000Z' },
+  { nombre: 'Wraith', puntuacion: 380, dinero: 800, puntuacionTotal: 1180, fecha: '2026-01-15T10:00:00.000Z' },
+  { nombre: 'Frost', puntuacion: 350, dinero: 700, puntuacionTotal: 1050, fecha: '2026-01-04T14:15:00.000Z' },
+  { nombre: 'Blaze', puntuacion: 320, dinero: 600, puntuacionTotal: 920, fecha: '2026-01-03T16:40:00.000Z' },
+  { nombre: 'Echo', puntuacion: 280, dinero: 500, puntuacionTotal: 780, fecha: '2026-01-02T09:25:00.000Z' },
+  { nombre: 'Hawk', puntuacion: 250, dinero: 400, puntuacionTotal: 650, fecha: '2026-01-01T11:50:00.000Z' }
 ];
 
 /**

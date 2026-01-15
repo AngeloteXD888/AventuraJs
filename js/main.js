@@ -3,7 +3,7 @@ import { Producto } from './clases/Producto.js';
 import { Enemigo } from './clases/Enemigo.js';
 import { Jefe } from './clases/Jefe.js';
 import { combate } from './modulos/Batalla.js';
-import { distinguirJugador, guardarRanking, obtenerRanking, mostrarRankingConsola } from './modulos/Ranking.js';
+import { distinguirJugador, guardarRanking, obtenerRanking, mostrarRankingConsola, inicializarRanking } from './modulos/Ranking.js';
 import { showScene, randomElement, formatearPrecio } from './utils.js';
 import { RAREZA } from './constants.js';
 
@@ -20,6 +20,10 @@ function inicializarJuego() {
   enemigoActualIndex = 0;
   carritoCompra = [];
   cargarEnemigosDesdeHTML();
+  
+  // IMPORTANTE: Inicializar ranking con datos por defecto
+  inicializarRanking();
+  
   if (jugador) {
     jugador.inventario = [];
     actualizarInventarioFooter();
@@ -59,12 +63,20 @@ function actualizarInventarioFooter() {
   const inventoryContainer = document.getElementById('inventory-container');
   inventoryContainer.innerHTML = '';
   
-  jugador.inventario.forEach(item => {
+  // IMPORTANTE: Siempre mostrar al menos 6 celdas vacías
+  const totalCeldas = Math.max(6, jugador.inventario.length);
+  
+  for (let i = 0; i < totalCeldas; i++) {
     const itemDiv = document.createElement('div');
     itemDiv.className = 'item';
-    itemDiv.innerHTML = `<img src="${item.imagen}" alt="${item.nombre}">`;
+    
+    if (i < jugador.inventario.length) {
+      const item = jugador.inventario[i];
+      itemDiv.innerHTML = `<img src="${item.imagen}" alt="${item.nombre}">`;
+    }
+    
     inventoryContainer.appendChild(itemDiv);
-  });
+  }
 }
 
 /**
@@ -666,8 +678,8 @@ function mostrarTablaRanking() {
     return;
   }
   
-  // Mostrar máximo 10 registros
-  ranking.slice(0, 10).forEach((registro, index) => {
+  // Mostrar todos los registros (no limitar a 10)
+  ranking.forEach((registro, index) => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td>${index + 1}</td>
