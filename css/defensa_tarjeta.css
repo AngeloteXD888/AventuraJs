@@ -1,0 +1,47 @@
+/*Panel secreto: Se deberá crear un elemento que contenga un título llamada “top secret” 
+y un párrafo a elección vuestra (a modo de pista para ganar la partida), que siempre 
+estará fijo en pantalla durante todas las escenas*/
+/*Sólamente se verá la parte superior del elemento, el párrafo estará por debajo de la 
+pantalla. Cuando se ponga el ratón encima, se deberá ver todo el panel junto con el 
+párrafo: */
+/*Es muy importante que se aplique una transición para que el movimiento de apertura 
+del panel sea suave y que el panel esté posicionado siempre en el fondo de la pantalla, 
+con un pequeño margen a su derecha, independientemente de la pantalla.*/
+
+.defensa-card {
+  position: fixed;
+  bottom: 0;
+  right: 16px;
+  width: 200px;
+  height: 40px;
+  background-color: var(--accent-color);
+  border: 2px solid var(--text-primary);
+  border-radius: 8px 8px 0 0;
+  overflow: hidden;
+  transition: height 0.3s ease;
+  z-index: 1000;
+}
+
+.defensa-card:hover {
+    height: 150px;
+}
+
+.defensa-card h2 {
+    color: var(--text-primary);
+    text-align: center;
+    margin: 8px 0;
+}
+
+.defensa-card p {
+    color: var(--text-primary);
+    padding: 8px;
+    font-size: 0.9rem;
+    line-height: 1.2;
+}
+
+.secret.panel {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}

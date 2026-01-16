@@ -1,0 +1,47 @@
+/*Estrellas: En la esquina superior derecha de la pantalla, aparecerán 5 estrellas*/
+/*Estas estrellas son polígonos creados a partir de: 
+clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 
+50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); 
+El objetivo será posicionar correctamente con espacios esas 5 estrellas, independientemente 
+del tamaño de ventana. 
+Por otra parte, estas deberán estar animadas infinitamente para que estén continuamente 
+girando sin parar (se mostrará en el proyector del aula). */
+
+.estrella {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  background-color: var(--accent-color);
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 
+                     50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  animation: girar 4s linear infinite;
+  margin-left: 8px;
+}
+
+@keyframes girar {
+    from {
+        transform: rotate(360deg);
+    }
+    to {
+        transform: rotate(0deg);
+    }
+}
+
+.estrella:nth-child(1) {
+    right: 16px;
+}
+
+.estrella:nth-child(2) {
+    right: 64px;
+}
+.estrella:nth-child(3) {
+    right: 112px;
+}
+.estrella:nth-child(4) {
+    right: 160px;
+}
+.estrella:nth-child(5) {
+    right: 208px;
+}
